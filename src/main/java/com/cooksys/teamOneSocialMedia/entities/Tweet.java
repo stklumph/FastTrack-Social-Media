@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.sun.istack.Nullable;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,20 +24,19 @@ public class Tweet {
 
 	@ManyToOne
 	@JoinColumn(name = "author_id")
+	@Column(nullable = false)
 	private User author;
 
+	@Column(nullable = false)
 	private Timestamp posted;
 
-	@Nullable
 	private String content;
 
 	@ManyToOne
-	@Nullable
 	@JoinColumn(name = "in_reply_to_ID")
 	private Tweet inReplyTo;
 
 	@ManyToOne
-	@Nullable
 	@JoinColumn(name = "repost_of_ID")
 	private Tweet repostOf;
 }

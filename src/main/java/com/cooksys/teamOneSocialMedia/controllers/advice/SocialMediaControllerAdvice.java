@@ -29,8 +29,8 @@ public class SocialMediaControllerAdvice {
 		return new ErrorDto(notFoundException.getMessage());
 	}
 
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler(NotFoundException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(NotAuthorizedException.class)
 	public ErrorDto handleNotAuthorizedException(HttpServletRequest request,
 			NotAuthorizedException notAuthorizedException) {
 		return new ErrorDto(notAuthorizedException.getMessage());
