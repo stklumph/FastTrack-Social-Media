@@ -7,6 +7,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -41,7 +42,8 @@ public class User {
 	@ManyToMany(mappedBy = "likes")
 	private List<Tweet> likedTweets;
 	
-	@ManyToMany(mappedBy = "following")
+	@ManyToMany
+	@JoinTable
 	private List<User> follwers;
 	
 	@ManyToMany(mappedBy = "followers")
