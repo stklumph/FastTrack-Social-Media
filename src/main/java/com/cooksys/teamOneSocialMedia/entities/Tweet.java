@@ -28,7 +28,6 @@ public class Tweet {
 
 	@ManyToOne
 	@JoinColumn(name = "author_id")
-	@Column(nullable = false)
 	private User author;
 
 	@Column(nullable = false, updatable = false)
@@ -38,18 +37,18 @@ public class Tweet {
 
 	private String content;
 
-	@OneToMany(mappedBy = "replies")
-	private Tweet inReplyTo;
-
 	@ManyToOne
 	@JoinColumn(name = "in_reply_to_ID")
-	private List<Tweet> replies;
+	private Tweet inReplyTo;
 
-	@OneToMany(mappedBy = "reposts")
-	private Tweet repostOf;
+	@OneToMany(mappedBy="inReplyTo")	
+	private List<Tweet> replies;
 
 	@ManyToOne
 	@JoinColumn(name = "repost_of_ID")
+	private Tweet repostOf;
+
+	@OneToMany(mappedBy = "repostOf")	
 	private List<Tweet> reposts;
 
 	@ManyToMany
