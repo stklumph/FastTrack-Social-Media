@@ -40,7 +40,7 @@ public class User {
 	// Adding this line might cause a problem if a Time stamp is not sent as part of
 	// the request to the database, not sure how to handle this
 	@Column(nullable = false, updatable = false)
-	private Timestamp joined;
+	private Timestamp joined = new Timestamp(System.currentTimeMillis());
 
 	private boolean deleted;
 

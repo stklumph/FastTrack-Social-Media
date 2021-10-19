@@ -31,7 +31,7 @@ public class Tweet {
 	private User author;
 
 	@Column(nullable = false, updatable = false)
-	private Timestamp posted;
+	private Timestamp posted = new Timestamp(System.currentTimeMillis());
 
 	private boolean deleted;
 

@@ -40,7 +40,7 @@ public class Seeder implements CommandLineRunner {
 	  p1.setLastName("One");
 	  p1.setPhone("111-111-1111");
 	  u1.setProfile(p1);
-	  u1.setJoined(Timestamp.valueOf("2007-09-23 10:10:10.0"));
+	  //u1.setJoined(Timestamp.valueOf("2007-09-23 10:10:10.0"));
 	  
 	  Tweet t1 = new Tweet();
 	  t1.setAuthor(u1);
@@ -55,9 +55,9 @@ public class Seeder implements CommandLineRunner {
 	  hashtagList.add(h1);
 	  hashtagList.add(h2);
 	  t1.setHashtags(hashtagList);
-	  t1.setPosted(Timestamp.valueOf("2007-09-23 10:10:10.0"));
-	  h1.setFirstUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
-	  h1.setLastUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
+	  //t1.setPosted(Timestamp.valueOf("2007-09-23 10:10:10.0"));
+	  //h1.setFirstUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
+	  //h1.setLastUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
 	  h2.setFirstUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
 	  h2.setLastUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
 	  

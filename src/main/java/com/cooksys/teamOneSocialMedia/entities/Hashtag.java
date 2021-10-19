@@ -24,10 +24,10 @@ public class Hashtag {
 	private String label;
 
 	@Column(nullable = false)
-	private Timestamp firstUsed;
+	private Timestamp firstUsed = new Timestamp(System.currentTimeMillis());
 
 	@Column(nullable = false)
-	private Timestamp lastUsed;
+	private Timestamp lastUsed = new Timestamp(System.currentTimeMillis());
 
 	@ManyToMany(mappedBy = "hashtags")
 	private List<Tweet> tweets;
