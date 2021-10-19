@@ -30,12 +30,6 @@ public class TweetController {
 		return tweetService.getAllTweets();
 	}
 
-	// Creates a tweet from a tweetRequestDto
-	@PostMapping
-	public TweetResponseDto createTweet(@RequestBody TweetRequestDto tweetRequestDto) {
-		return tweetService.createTweet(tweetRequestDto);
-	}
-
 	// Retrieves a tweet with a given id. If no such tweet exists, or the given
 	// tweet is deleted,
 	// an error should be sent in lieu of a response
@@ -67,6 +61,20 @@ public class TweetController {
 	@GetMapping("/{id}/mentions")
 	public List<UserResponseDto> getTweetMentions(@PathVariable Integer id) {
 		return tweetService.getTweetMentions(id);
+	}
+
+	// Retrieves the direct replies to the tweet with the given id. If that tweet is
+	// deleted
+	// or otherwise doesn't exist, an error should be sent in lieu of a response.
+	@GetMapping("/{id}/replies")
+	public List<TweetResponseDto> getTweetReplies(@PathVariable Integer id) {
+		return tweetService.getTweetReplies(id);
+	}
+
+	// Creates a tweet from a tweetRequestDto
+	@PostMapping
+	public TweetResponseDto createTweet(@RequestBody TweetRequestDto tweetRequestDto) {
+		return tweetService.createTweet(tweetRequestDto);
 	}
 
 }
