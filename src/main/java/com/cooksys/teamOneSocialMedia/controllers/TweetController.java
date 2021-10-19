@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.service.TweetService;
 
@@ -30,6 +31,16 @@ public class TweetController {
 	public TweetResponseDto getTweetById(@PathVariable Integer id) {
 		return tweetService.getTweetById(id);
 	}
+	
+	//Retrieves the tags associated with the tweet with the given id. If that tweet is deleted
+	//or otherwise doesn't exist, an error should be sent in lieu of a response.
+	@GetMapping("/{id}/tags")
+	public List<HashtagDto> getTagsByTweetId(@PathVariable Integer id){
+		return tweetService.getTagsByTweetId(id);
+	}
+	
+	
+	
 	
 	
 }
