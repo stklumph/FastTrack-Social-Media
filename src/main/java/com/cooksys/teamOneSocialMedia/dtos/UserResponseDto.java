@@ -15,8 +15,7 @@ public class UserResponseDto {
 
 	public String username;
 
-	@Embedded
-	public Profile profile;
+	public ProfileDto profile;
 
 	public Timestamp joined;
 }
