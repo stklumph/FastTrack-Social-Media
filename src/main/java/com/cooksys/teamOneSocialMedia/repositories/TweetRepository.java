@@ -10,7 +10,7 @@ import com.cooksys.teamOneSocialMedia.entities.Tweet;
 
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Integer> {
-	List<Tweet> findByDeletedFalse();
+	List<Tweet> findByDeletedFalseOrderByPostedDesc();
 	
 	Optional<Tweet> findByIdAndDeletedFalse(Integer id);
 }
