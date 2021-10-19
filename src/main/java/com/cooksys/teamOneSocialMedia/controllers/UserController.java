@@ -28,4 +28,8 @@ public class UserController {
     public UserResponseDto createUser(@RequestBody UserRequestDto userRequestDto){
         return userService.createUser(userRequestDto);
     }
+    @GetMapping ("/@{username}") //Retrieves a user with the given username. If no such user exists or is deleted, an error should be sent in lieu of a response.
+    public UserResponseDto getUser(@PathVariable String username){
+        return userService.getUser(username);
+    }
 }
