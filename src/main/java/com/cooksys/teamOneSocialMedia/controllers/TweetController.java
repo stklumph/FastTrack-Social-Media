@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
+import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.service.TweetService;
 
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,32 @@ public class TweetController {
 		return tweetService.getTagsByTweetId(id);
 	}
 	
+	//Retrieves the active users who have liked the tweet with the given id. If that tweet is 
+	//deleted or otherwise doesn't exist, an error should be sent in lieu of a response.
+	@GetMapping("/{id}/likes")
+	public List<UserResponseDto> getTweetLikes(@PathVariable Integer id){
+		return tweetService.getTweetLikes(id);
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 	
 }
+
+
+
+
+
+
+
+
+
+
+

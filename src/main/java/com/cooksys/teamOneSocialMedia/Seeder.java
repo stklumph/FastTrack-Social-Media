@@ -123,6 +123,10 @@ public class Seeder implements CommandLineRunner {
 	  Tweet t3 = new Tweet();
 	  t3.setAuthor(u3);
 	  t3.setContent("Entry 3");
+	  List<User> likes = new ArrayList<>();
+	  likes.add(u1);
+	  likes.add(u2);
+	  t3.setLikes(likes);
 	  
 	  Hashtag h5 = new Hashtag();
 	  h5.setLabel("triple");
