@@ -4,6 +4,7 @@ package com.cooksys.teamOneSocialMedia.services.impl;
 import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.User;
+import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
 import com.cooksys.teamOneSocialMedia.exceptions.BadRequestException;
 import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
 import com.cooksys.teamOneSocialMedia.mappers.UserMapper;
@@ -36,24 +37,24 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findByCredentialsUsername(username);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if(user.isDeleted()) {
+            if (user.isDeleted()) {
                 if (user.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
                     user.setDeleted(false);
                     userRepository.saveAndFlush(user);
                     return userMapper.entityToDto(userMapper.requestDtoToEntity(userRequestDto));
-                }
-                else {
+                } else {
                     throw new BadRequestException("username : " + username + " is already taken");
                 }
-            }
-            else {
+            } else {
                 throw new BadRequestException("username : " + username + " is already taken");
             }
         }//create user
-        else {return userMapper.entityToDto(userRepository.saveAndFlush(userMapper.requestDtoToEntity(userRequestDto)));
+        else {
+            return userMapper.entityToDto(userRepository.saveAndFlush(userMapper.requestDtoToEntity(userRequestDto)));
         }
 
     }
+
     private User getUserByUsername(String username) {
         Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
         if (optionalUser.isEmpty()) {
@@ -61,9 +62,23 @@ public class UserServiceImpl implements UserService {
         }
         return optionalUser.get();
     }
+
     @Override
     public UserResponseDto getUser(String username) {
         return userMapper.entityToDto(getUserByUsername(username));
+    }
+    private void validateUserCredentials(User user, Credentials credentials) {
+        if(!user.getCredentials().equals(credentials)) {
+            throw new BadRequestException("Credentials invalid");
+        }
+    }
+    @Override
+    public UserResponseDto patchUser(UserRequestDto userRequestDto) {
+        User user = getUserByUsername(userRequestDto.getCredentials().getUsername());
+        User userCheck = userMapper.requestDtoToEntity(userRequestDto);
+        validateUserCredentials(user, userCheck.getCredentials());
+        user.setProfile(userCheck.getProfile());
+        return userMapper.entityToDto(userRepository.saveAndFlush(user));
     }
 
 }

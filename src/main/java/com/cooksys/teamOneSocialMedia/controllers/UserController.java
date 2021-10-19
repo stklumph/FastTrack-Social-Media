@@ -32,4 +32,10 @@ public class UserController {
     public UserResponseDto getUser(@PathVariable String username){
         return userService.getUser(username);
     }
+
+    @PatchMapping ("/@{username}") //Updates the profile of a user with the given username. If no such user exists, the user is deleted, or the provided credentials do not match the user, an error should be sent in lieu of a response. In the case of a successful update, the returned user should contain the updated data.
+
+    public UserResponseDto patchUser(@RequestBody UserRequestDto userRequestDto) {
+        return userService.patchUser(userRequestDto);
+    }
 }
