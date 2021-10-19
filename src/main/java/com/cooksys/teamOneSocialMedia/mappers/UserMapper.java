@@ -12,9 +12,6 @@ import java.util.List;
 public interface UserMapper {
 
 
-
     List<UserResponseDto> entitiesToDtos(List<User> entities);
-
-
 
 }

@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class Tweet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", nullable = false)
+	@Column(name = "id")
 	private Integer id;
 
 	@ManyToOne
