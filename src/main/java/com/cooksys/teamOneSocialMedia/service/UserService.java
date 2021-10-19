@@ -14,4 +14,6 @@ public interface UserService {
     UserResponseDto getUser(String username);
 
     UserResponseDto patchUser(UserRequestDto userRequestDto);
+
+    UserResponseDto deleteUser(UserRequestDto userRequestDto);
 }

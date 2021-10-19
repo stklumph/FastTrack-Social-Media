@@ -81,4 +81,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.entityToDto(userRepository.saveAndFlush(user));
     }
 
+    @Override
+    public UserResponseDto deleteUser(UserRequestDto userRequestDto) {
+        User user = getUserByUsername(userRequestDto.getCredentials().getUsername());
+        User userCheck = userMapper.requestDtoToEntity(userRequestDto);
+        validateUserCredentials(user, userCheck.getCredentials());
+        user.setDeleted(true);
+        return userMapper.entityToDto(userRepository.saveAndFlush(user));
+    }
+
+
 }
