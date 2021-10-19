@@ -2,9 +2,6 @@ package com.cooksys.teamOneSocialMedia.dtos;
 
 import java.sql.Timestamp;
 
-import com.cooksys.teamOneSocialMedia.entities.Tweet;
-import com.cooksys.teamOneSocialMedia.entities.User;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
