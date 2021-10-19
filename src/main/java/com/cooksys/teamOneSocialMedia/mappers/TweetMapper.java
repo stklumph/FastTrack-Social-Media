@@ -11,4 +11,5 @@ import com.cooksys.teamOneSocialMedia.entities.Tweet;
 public interface TweetMapper {
 	List<TweetResponseDto> entitiesToDtos( List<Tweet> entities);
 	
+	TweetResponseDto entityToDto(Tweet entity);
 }
