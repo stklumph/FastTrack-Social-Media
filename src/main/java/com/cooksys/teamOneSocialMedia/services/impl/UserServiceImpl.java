@@ -5,6 +5,7 @@ import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.exceptions.BadRequestException;
+import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
 import com.cooksys.teamOneSocialMedia.mappers.UserMapper;
 import com.cooksys.teamOneSocialMedia.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,17 @@ public class UserServiceImpl implements UserService {
         else {return userMapper.entityToDto(userRepository.saveAndFlush(userMapper.requestDtoToEntity(userRequestDto)));
         }
 
+    }
+    private User getUserByUsername(String username) {
+        Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
+        if (optionalUser.isEmpty()) {
+            throw new NotFoundException("No user found with username: " + username);
+        }
+        return optionalUser.get();
+    }
+    @Override
+    public UserResponseDto getUser(String username) {
+        return userMapper.entityToDto(getUserByUsername(username));
     }
 
 }
