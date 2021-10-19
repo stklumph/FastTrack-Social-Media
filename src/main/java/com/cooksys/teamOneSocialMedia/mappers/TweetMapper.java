@@ -7,7 +7,8 @@ import org.mapstruct.Mapper;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.Tweet;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { UserMapper.class })
 public interface TweetMapper {
 	List<TweetResponseDto> entitiesToDtos( List<Tweet> entities);
+	
 }
