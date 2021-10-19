@@ -32,7 +32,7 @@ public class User {
 	@Embedded
 	@Column(nullable = false)
 	private Credentials credentials;
-
+	
 	@Embedded
 	@Column(nullable = false)
 	private Profile profile;

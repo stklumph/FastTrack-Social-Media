@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class TweetResponseDto {
 	public Integer Id;
 
-	public User author;
+	public UserResponseDto author;
 
 	public Timestamp posted;
 

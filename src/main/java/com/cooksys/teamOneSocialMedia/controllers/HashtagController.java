@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.Hashtag;
 import com.cooksys.teamOneSocialMedia.entities.Tweet;
@@ -22,7 +23,7 @@ public class HashtagController {
 	private final HashtagService hashtagService;
 	//Retrieves all hashtags tracked by the database.
 	@GetMapping
-	public List<Hashtag> getAllHashtags(){
+	public List<HashtagDto> getAllHashtags(){
 		return hashtagService.getAllHashtags();
 	}
 	
