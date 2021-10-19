@@ -127,6 +127,8 @@ public class Seeder implements CommandLineRunner {
 	  likes.add(u1);
 	  likes.add(u2);
 	  t3.setLikes(likes);
+	  likes.add(u3);
+	  t3.setUsersMentioned(likes);
 	  
 	  Hashtag h5 = new Hashtag();
 	  h5.setLabel("triple");

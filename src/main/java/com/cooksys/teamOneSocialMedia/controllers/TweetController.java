@@ -47,7 +47,12 @@ public class TweetController {
 		return tweetService.getTweetLikes(id);
 	}
 	
-	
+	//Retrieves the users mentioned in the tweet with the given id. If that tweet is deleted
+	//or otherwise doesn't exist, an error should be sent in lieu of a response.
+	@GetMapping("/{id}/mentions")
+	public List<UserResponseDto> getTweetMentions(@PathVariable Integer id){
+		return tweetService.getTweetMentions(id);
+	}
 	
 	
 	

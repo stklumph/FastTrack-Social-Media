@@ -1,5 +1,6 @@
 package com.cooksys.teamOneSocialMedia.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.Tweet;
+import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
 import com.cooksys.teamOneSocialMedia.mappers.HashtagMapper;
 import com.cooksys.teamOneSocialMedia.mappers.TweetMapper;
@@ -57,8 +59,29 @@ public class TweetServiceImpl implements TweetService {
 	@Override
 	public List<UserResponseDto> getTweetLikes(Integer id) {
 		Tweet tweet = getTweet(id);
-		
-		return userMapper.entitiesToDtos(tweet.getLikes());
+		List<User> userLikes = tweet.getLikes();
+		List<User> remove = new ArrayList<>();
+		for(User u: userLikes) {
+			if(u.isDeleted()) {
+				remove.add(u);
+			}
+		}
+		userLikes.removeAll(remove);
+		return userMapper.entitiesToDtos(userLikes);
+	}
+
+	@Override
+	public List<UserResponseDto> getTweetMentions(Integer id) {
+		Tweet tweet = getTweet(id);
+		List<User> userMentions = tweet.getUsersMentioned();
+		List<User> remove = new ArrayList<>();
+		for(User u: userMentions) {
+			if(u.isDeleted()) {
+				remove.add(u);
+			}
+		}
+		userMentions.removeAll(remove);
+		return userMapper.entitiesToDtos(userMentions);
 	}
 
 }

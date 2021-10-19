@@ -16,4 +16,6 @@ public interface TweetService {
 
 	List<UserResponseDto> getTweetLikes(Integer id);
 
+	List<UserResponseDto> getTweetMentions(Integer id);
+
 }
