@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.cooksys.teamOneSocialMedia.entities.Tweet;
 
 @Repository
-public interface TweetRepository extends JpaRepository<Tweet, Long> {
+public interface TweetRepository extends JpaRepository<Tweet, Integer> {
 	List<Tweet> findByDeletedFalse();
 }
