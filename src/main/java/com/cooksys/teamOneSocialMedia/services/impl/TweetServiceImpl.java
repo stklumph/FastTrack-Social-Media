@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
+import com.cooksys.teamOneSocialMedia.entities.Deleted;
 import com.cooksys.teamOneSocialMedia.entities.Tweet;
 import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
@@ -82,6 +83,23 @@ public class TweetServiceImpl implements TweetService {
 		}
 		userMentions.removeAll(remove);
 		return userMapper.entitiesToDtos(userMentions);
+	}
+
+	public <T extends Deleted> List<T> filterDeleted(List<T> filter){
+		List<T> remove = new ArrayList<>();
+		for(T t: filter) {
+			if(t.isDeleted()) {
+				remove.add(t);
+			}
+		}
+		filter.removeAll(remove);
+		return filter;
+	}
+	@Override
+	public List<TweetResponseDto> getTweetReplies(Integer id) {
+		Tweet tweet = getTweet(id);
+		List<Tweet> replies = filterDeleted(tweet.getReplies());
+		return tweetMapper.entitiesToDtos(replies);
 	}
 
 }

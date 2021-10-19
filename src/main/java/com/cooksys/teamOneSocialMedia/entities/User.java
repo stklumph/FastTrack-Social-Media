@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "user_table")
 @NoArgsConstructor
 @Data
-public class User {
+public class User implements Deleted{
 
 	@Id
 	@GeneratedValue

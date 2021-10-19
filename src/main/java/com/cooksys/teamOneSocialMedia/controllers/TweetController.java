@@ -54,6 +54,12 @@ public class TweetController {
 		return tweetService.getTweetMentions(id);
 	}
 	
+	//Retrieves the direct replies to the tweet with the given id. If that tweet is deleted
+	//or otherwise doesn't exist, an error should be sent in lieu of a response.
+	@GetMapping("/{id}/replies")
+	public List<TweetResponseDto> getTweetReplies(@PathVariable Integer id){
+		return tweetService.getTweetReplies(id);
+	}
 	
 	
 	

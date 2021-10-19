@@ -1,6 +1,7 @@
 package com.cooksys.teamOneSocialMedia;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class Seeder implements CommandLineRunner {
 	  p1.setLastName("One");
 	  p1.setPhone("111-111-1111");
 	  u1.setProfile(p1);
-	  u1.setJoined(Timestamp.valueOf("2007-09-23 10:10:10.0"));
+	  u1.setJoined(Timestamp.valueOf(LocalDateTime.now()));
 	  
 	  Tweet t1 = new Tweet();
 	  t1.setAuthor(u1);
@@ -55,11 +56,11 @@ public class Seeder implements CommandLineRunner {
 	  hashtagList.add(h1);
 	  hashtagList.add(h2);
 	  t1.setHashtags(hashtagList);
-	  t1.setPosted(Timestamp.valueOf("2007-09-23 10:10:10.0"));
-	  h1.setFirstUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
-	  h1.setLastUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
-	  h2.setFirstUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
-	  h2.setLastUsed(Timestamp.valueOf("2007-09-23 10:10:10.0"));
+	  t1.setPosted(Timestamp.valueOf(LocalDateTime.now()));
+	  h1.setFirstUsed(Timestamp.valueOf(LocalDateTime.now()));
+	  h1.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
+	  h2.setFirstUsed(Timestamp.valueOf(LocalDateTime.now()));
+	  h2.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
 	  
 	  
 	  hashtagRepository.saveAndFlush(h1);
@@ -79,7 +80,7 @@ public class Seeder implements CommandLineRunner {
 	  p2.setLastName("Two");
 	  p2.setPhone("222-222-2222");
 	  u2.setProfile(p2);
-	  u2.setJoined(Timestamp.valueOf("2008-09-23 10:10:10.0"));
+	  u2.setJoined(Timestamp.valueOf(LocalDateTime.now()));
 	  
 	  Tweet t2 = new Tweet();
 	  t2.setAuthor(u2);
@@ -94,11 +95,11 @@ public class Seeder implements CommandLineRunner {
 	  hashtagList2.add(h3);
 	  hashtagList2.add(h4);
 	  t2.setHashtags(hashtagList2);
-	  t2.setPosted(Timestamp.valueOf("2008-09-23 10:10:10.0"));
-	  h3.setFirstUsed(Timestamp.valueOf("2008-09-23 10:10:10.0"));
-	  h3.setLastUsed(Timestamp.valueOf("2008-09-23 10:10:10.0"));
-	  h4.setFirstUsed(Timestamp.valueOf("2008-09-23 10:10:10.0"));
-	  h4.setLastUsed(Timestamp.valueOf("2008-09-23 10:10:10.0"));
+	  t2.setPosted(Timestamp.valueOf(LocalDateTime.now()));
+	  h3.setFirstUsed(Timestamp.valueOf(LocalDateTime.now()));
+	  h3.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
+	  h4.setFirstUsed(Timestamp.valueOf(LocalDateTime.now()));
+	  h4.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
 	  
 	  
 	  hashtagRepository.saveAndFlush(h3);
@@ -118,7 +119,7 @@ public class Seeder implements CommandLineRunner {
 	  p3.setLastName("Three");
 	  p3.setPhone("333-333-3333");
 	  u3.setProfile(p3);
-	  u3.setJoined(Timestamp.valueOf("2009-09-23 10:10:10.0"));
+	  u3.setJoined(Timestamp.valueOf(LocalDateTime.now()));
 	  
 	  Tweet t3 = new Tweet();
 	  t3.setAuthor(u3);
@@ -127,8 +128,14 @@ public class Seeder implements CommandLineRunner {
 	  likes.add(u1);
 	  likes.add(u2);
 	  t3.setLikes(likes);
-	  likes.add(u3);
-	  t3.setUsersMentioned(likes);
+	  List<User> mentions = new ArrayList<>();
+	  mentions.addAll(likes);
+	  mentions.add(u3);
+	  t3.setUsersMentioned(mentions);
+	  //List<Tweet> replies = new ArrayList<>();
+	  //replies.add(t1);
+	  //replies.add(t2);
+	  t3.setInReplyTo(t2);
 	  
 	  Hashtag h5 = new Hashtag();
 	  h5.setLabel("triple");
@@ -139,11 +146,11 @@ public class Seeder implements CommandLineRunner {
 	  hashtagList3.add(h5);
 	  hashtagList3.add(h6);
 	  t3.setHashtags(hashtagList3);
-	  t3.setPosted(Timestamp.valueOf("2009-09-23 10:10:10.0"));
-	  h5.setFirstUsed(Timestamp.valueOf("2009-09-23 10:10:10.0"));
-	  h5.setLastUsed(Timestamp.valueOf("2009-09-23 10:10:10.0"));
-	  h6.setFirstUsed(Timestamp.valueOf("2009-09-23 10:10:10.0"));
-	  h6.setLastUsed(Timestamp.valueOf("2009-09-23 10:10:10.0"));
+	  t3.setPosted(Timestamp.valueOf(LocalDateTime.now()));
+	  h5.setFirstUsed(Timestamp.valueOf(LocalDateTime.now()));
+	  h5.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
+	  h6.setFirstUsed(Timestamp.valueOf(LocalDateTime.now()));
+	  h6.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
 	  
 	  
 	  hashtagRepository.saveAndFlush(h5);
