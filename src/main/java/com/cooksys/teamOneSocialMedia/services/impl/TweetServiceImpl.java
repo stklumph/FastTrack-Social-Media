@@ -30,8 +30,7 @@ public class TweetServiceImpl implements TweetService {
 	private final TweetMapper tweetMapper;
 	private final TweetRepository tweetRepository;
 
-	private final String ampersand = "^@";
-	private final String hashtag = "^#";
+
 
 	private final HashtagMapper hashtagMapper;
 
@@ -40,14 +39,6 @@ public class TweetServiceImpl implements TweetService {
 	@Override
 	public List<TweetResponseDto> getAllTweets() {
 		return tweetMapper.entitiesToDtos(tweetRepository.findByDeletedFalseOrderByPostedDesc());
-	}
-
-	@Override
-	public TweetResponseDto createTweet(TweetRequestDto tweetRequestDto) {
-		Pattern pattern = Pattern.compile(ampersand);
-		Matcher matcher = pattern.matcher(tweetRequestDto.getContent());
-
-		return null;
 	}
 
 	// helper method
@@ -99,21 +90,43 @@ public class TweetServiceImpl implements TweetService {
 
 	}
 
-	public <T extends Deleted> List<T> filterDeleted(List<T> filter){
+	public <T extends Deleted> List<T> filterDeleted(List<T> filter) {
 		List<T> remove = new ArrayList<>();
-		for(T t: filter) {
-			if(t.isDeleted()) {
+		for (T t : filter) {
+			if (t.isDeleted()) {
 				remove.add(t);
 			}
 		}
 		filter.removeAll(remove);
 		return filter;
 	}
+
 	@Override
 	public List<TweetResponseDto> getTweetReplies(Integer id) {
 		Tweet tweet = getTweet(id);
 		List<Tweet> replies = filterDeleted(tweet.getReplies());
 		return tweetMapper.entitiesToDtos(replies);
+	}
+
+	
+	private List<String> parseMentions(String content){
+		final String ampersandRegEx = "^@";
+		Pattern pattern = Pattern.compile(ampersandRegEx);
+		Matcher matcher = pattern.matcher(content);
+		List<String> mentions = new ArrayList<>();
+		while(matcher.find()) {
+			mentions.add(matcher.group());
+		}
+		
+		return mentions;
+	}
+	
+	@Override
+	public TweetResponseDto createTweet(TweetRequestDto tweetRequestDto) {
+		String content = tweetRequestDto.getContent();
+		List<String> mentions = parseMentions(content);
+		
+		return null;
 	}
 
 }

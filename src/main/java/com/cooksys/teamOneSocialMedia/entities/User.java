@@ -1,6 +1,7 @@
 package com.cooksys.teamOneSocialMedia.entities;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -40,7 +41,7 @@ public class User implements Deleted{
 	// Adding this line might cause a problem if a Time stamp is not sent as part of
 	// the request to the database, not sure how to handle this
 	@Column(nullable = false, updatable = false)
-	private Timestamp joined = new Timestamp(System.currentTimeMillis());
+	private Timestamp joined = Timestamp.valueOf(LocalDateTime.now());
 
 	private boolean deleted;
 

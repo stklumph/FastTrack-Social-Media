@@ -1,13 +1,12 @@
 package com.cooksys.teamOneSocialMedia.mappers;
 
-import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
-import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
-import com.cooksys.teamOneSocialMedia.entities.Tweet;
-import com.cooksys.teamOneSocialMedia.entities.User;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.List;
+import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
+import com.cooksys.teamOneSocialMedia.entities.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
