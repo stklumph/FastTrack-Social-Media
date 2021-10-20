@@ -5,12 +5,14 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
 import com.cooksys.teamOneSocialMedia.exceptions.BadRequestException;
 import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
+import com.cooksys.teamOneSocialMedia.mappers.CredentialsMapper;
 import com.cooksys.teamOneSocialMedia.mappers.UserMapper;
 import com.cooksys.teamOneSocialMedia.repositories.UserRepository;
 import com.cooksys.teamOneSocialMedia.service.UserService;
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final UserMapper userMapper;
+	private final CredentialsMapper credentialsMapper;
 
 	@Override
 	public List<UserResponseDto> getAllUsers() {
@@ -88,6 +91,24 @@ public class UserServiceImpl implements UserService {
 		validateUserCredentials(user, userCheck.getCredentials());
 		user.setDeleted(true);
 		return userMapper.entityToDto(userRepository.saveAndFlush(user));
+	}
+
+	@Override
+	public void followUser(String username, CredentialsDto credentialsDto) {
+		User user = getUserByUsername(credentialsDto.getUsername());
+		validateUserCredentials(user, credentialsMapper.DtoToEntity(credentialsDto));
+		User userToFollow = getUserByUsername(username);
+		userToFollow.userFollowing(user);
+		userRepository.saveAndFlush(userToFollow);
+	}
+
+	@Override
+	public void unfollowUser(String username, CredentialsDto credentialsDto) {
+		User user = getUserByUsername(credentialsDto.getUsername());
+		validateUserCredentials(user, credentialsMapper.DtoToEntity(credentialsDto));
+		User userToFollow = getUserByUsername(username);
+		userToFollow.userUnfollowing(user);
+		userRepository.saveAndFlush(userToFollow);
 	}
 
 }

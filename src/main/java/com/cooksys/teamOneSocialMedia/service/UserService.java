@@ -1,5 +1,6 @@
 package com.cooksys.teamOneSocialMedia.service;
 
+import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.User;
@@ -21,4 +22,8 @@ public interface UserService {
 	User getUserByUsername(String username);
 
 	void validateUserCredentials(User user, Credentials credentials);
+
+    void followUser(String username, CredentialsDto credentialsDto);
+
+    void unfollowUser(String username, CredentialsDto credentialsDto);
 }
