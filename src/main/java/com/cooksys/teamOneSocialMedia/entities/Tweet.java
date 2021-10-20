@@ -1,7 +1,6 @@
 package com.cooksys.teamOneSocialMedia.entities;
 
 import java.sql.Timestamp;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.Column;

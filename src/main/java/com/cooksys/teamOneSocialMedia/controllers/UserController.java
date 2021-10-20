@@ -1,5 +1,6 @@
 package com.cooksys.teamOneSocialMedia.controllers;
 
+import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.service.UserService;
@@ -34,8 +35,20 @@ public class UserController {
     }
 
     @PatchMapping ("/@{username}") //Updates the profile of a user with the given username. If no such user exists, the user is deleted, or the provided credentials do not match the user, an error should be sent in lieu of a response. In the case of a successful update, the returned user should contain the updated data.
-
     public UserResponseDto patchUser(@RequestBody UserRequestDto userRequestDto) {
         return userService.patchUser(userRequestDto);
     }
+    @DeleteMapping ("/@{username}") // "Deletes" a user with the given username. If no such user exists or the provided credentials do not match the user, an error should be sent in lieu of a response. If a user is successfully "deleted", the response should contain the user data prior to deletion.
+    public UserResponseDto deleteUser(@RequestBody UserRequestDto userRequestDto){
+        return userService.deleteUser(userRequestDto);
+    }
+    @PostMapping ("/@{username}/follow") //Subscribes the user whose credentials are provided by the request body to the user whose username is given in the url. If there is already a following relationship between the two users, no such followable user exists (deleted or never created), or the credentials provided do not match an active user in the database, an error should be sent as a response. If successful, no data is sent.
+    public void followUser(@PathVariable String username, @RequestBody CredentialsDto credentialsDto){
+        userService.followUser(username, credentialsDto);
+    }
+    @PostMapping ("/@{username}/unfollow") //Subscribes the user whose credentials are provided by the request body to the user whose username is given in the url. If there is already a following relationship between the two users, no such followable user exists (deleted or never created), or the credentials provided do not match an active user in the database, an error should be sent as a response. If successful, no data is sent.
+    public void unfollowUser(@PathVariable String username, @RequestBody CredentialsDto credentialsDto){
+        userService.unfollowUser(username, credentialsDto);
+    }
+
 }
