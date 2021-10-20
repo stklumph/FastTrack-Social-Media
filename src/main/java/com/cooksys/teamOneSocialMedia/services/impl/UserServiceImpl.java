@@ -1,21 +1,22 @@
 package com.cooksys.teamOneSocialMedia.services.impl;
 
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.User;
+import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
 import com.cooksys.teamOneSocialMedia.exceptions.BadRequestException;
 import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
 import com.cooksys.teamOneSocialMedia.mappers.UserMapper;
 import com.cooksys.teamOneSocialMedia.repositories.UserRepository;
-import org.springframework.stereotype.Service;
-
 import com.cooksys.teamOneSocialMedia.service.UserService;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+    
     private User getUserByUsername(String username) {
         Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
         if (optionalUser.isEmpty()) {
