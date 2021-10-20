@@ -1,6 +1,7 @@
 package com.cooksys.teamOneSocialMedia.entities;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
-public class Tweet implements Deleted{
+public class Tweet implements Deleted, Comparable<Tweet>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
@@ -62,4 +63,13 @@ public class Tweet implements Deleted{
 	@ManyToMany
 	@JoinTable
 	private List<User> usersMentioned;
+
+	@Override
+	public int compareTo(Tweet t) {
+		return this.getPosted().compareTo(t.getPosted());
+	}
 }
+
+
+
+

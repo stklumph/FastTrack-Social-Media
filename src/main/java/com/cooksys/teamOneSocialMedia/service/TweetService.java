@@ -3,6 +3,7 @@ package com.cooksys.teamOneSocialMedia.service;
 import java.util.List;
 
 import com.cooksys.teamOneSocialMedia.dtos.TweetRequestDto;
+import com.cooksys.teamOneSocialMedia.dtos.ContextDto;
 import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
@@ -22,5 +23,7 @@ public interface TweetService {
 	List<UserResponseDto> getTweetMentions(Integer id);
 
 	List<TweetResponseDto> getTweetReplies(Integer id);
+
+	ContextDto getTweetContext(Integer id);
 
 }

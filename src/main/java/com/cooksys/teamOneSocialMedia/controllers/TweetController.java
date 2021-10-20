@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cooksys.teamOneSocialMedia.dtos.ContextDto;
 import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
@@ -70,6 +71,13 @@ public class TweetController {
 	public List<TweetResponseDto> getTweetReplies(@PathVariable Integer id) {
 		return tweetService.getTweetReplies(id);
 	}
+	
+	//Retrieves the context of the tweet with the given id. If that tweet is deleted
+	//or otherwise doesn't exist, an error should be sent in lieu of a response.
+	@GetMapping("/{id}/context")
+	public ContextDto getTweetContext(@PathVariable Integer id) {
+		return tweetService.getTweetContext(id);
+	}
 
 	// Creates a tweet from a tweetRequestDto
 	@PostMapping
@@ -78,3 +86,7 @@ public class TweetController {
 	}
 
 }
+
+
+
+

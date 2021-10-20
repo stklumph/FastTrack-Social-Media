@@ -1,10 +1,12 @@
 package com.cooksys.teamOneSocialMedia.service;
 
+import java.util.List;
+
 import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 
 
-import java.util.List;
+
 
 public interface UserService {
     List<UserResponseDto> getAllUsers();
