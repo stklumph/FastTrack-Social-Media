@@ -2,7 +2,6 @@ package com.cooksys.teamOneSocialMedia.entities;
 
 import java.sql.Timestamp;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,10 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
 import com.cooksys.teamOneSocialMedia.entities.embeddables.Profile;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -59,4 +56,20 @@ public class User implements Deleted{
 
 	@ManyToMany(mappedBy = "usersMentioned")
 	private List<Tweet> mentions;
+
+	public void userFollow(User userToAdd){
+	following.add(userToAdd);
+	}
+
+	public void userUnfollow(User userToRemove){
+		following.remove(userToRemove);
+	}
+
+	public void userFollowing(User userToAdd){
+		followers.add(userToAdd);
+	}
+
+	public void userUnfollowing(User userToRemove){
+		followers.remove(userToRemove);
+	}
 }
