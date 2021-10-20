@@ -1,13 +1,16 @@
 package com.cooksys.teamOneSocialMedia.services.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
+import com.cooksys.teamOneSocialMedia.dtos.ContextDto;
 import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
@@ -61,6 +64,24 @@ public class TweetServiceImpl implements TweetService {
 		return optionalTweet.get();
 	}
 
+	// helper method
+	public <T extends Deleted> List<T> filterDeleted(List<T> filter) {
+		if (filter.isEmpty()) {
+			return filter;
+		}
+		List<T> remove = new ArrayList<>();
+		for (T t : filter) {
+			if (t == null) {
+				continue;
+			}
+			if (t.isDeleted()) {
+				remove.add(t);
+			}
+		}
+		filter.removeAll(remove);
+		return filter;
+	}
+
 	@Override
 	public TweetResponseDto getTweetById(Integer id) {
 		return tweetMapper.entityToDto(getTweet(id));
@@ -75,41 +96,15 @@ public class TweetServiceImpl implements TweetService {
 	@Override
 	public List<UserResponseDto> getTweetLikes(Integer id) {
 		Tweet tweet = getTweet(id);
-		List<User> userLikes = tweet.getLikes();
-		List<User> remove = new ArrayList<>();
-		for (User u : userLikes) {
-			if (u.isDeleted()) {
-				remove.add(u);
-			}
-		}
-		userLikes.removeAll(remove);
+		List<User> userLikes = filterDeleted(tweet.getLikes());
 		return userMapper.entitiesToDtos(userLikes);
 	}
 
 	@Override
 	public List<UserResponseDto> getTweetMentions(Integer id) {
 		Tweet tweet = getTweet(id);
-		List<User> userMentions = tweet.getUsersMentioned();
-		List<User> remove = new ArrayList<>();
-		for (User u : userMentions) {
-			if (u.isDeleted()) {
-				remove.add(u);
-			}
-		}
-		userMentions.removeAll(remove);
+		List<User> userMentions = filterDeleted(tweet.getUsersMentioned());
 		return userMapper.entitiesToDtos(userMentions);
-
-	}
-
-	public <T extends Deleted> List<T> filterDeleted(List<T> filter) {
-		List<T> remove = new ArrayList<>();
-		for (T t : filter) {
-			if (t.isDeleted()) {
-				remove.add(t);
-			}
-		}
-		filter.removeAll(remove);
-		return filter;
 	}
 
 	@Override
@@ -117,6 +112,52 @@ public class TweetServiceImpl implements TweetService {
 		Tweet tweet = getTweet(id);
 		List<Tweet> replies = filterDeleted(tweet.getReplies());
 		return tweetMapper.entitiesToDtos(replies);
+	}
+
+	@Override
+	public ContextDto getTweetContext(Integer id) {
+		Tweet tweet = getTweet(id);
+
+		ContextDto context = new ContextDto();
+		context.setTarget(tweetMapper.entityToDto(tweet));
+		List<Tweet> before = new ArrayList<>();
+		Tweet current = tweet;
+		while (current.getInReplyTo() != null) {
+			current = current.getInReplyTo();
+			before.add(0, current.getInReplyTo());
+		}
+
+		context.setBefore(tweetMapper.entitiesToDtos(filterDeleted(before)));
+
+		Stack<Tweet> toVisit = new Stack<>();
+		List<Tweet> after = new ArrayList<>();
+		current = tweet; // reset
+		if (!current.getReplies().isEmpty()) {
+			for (Tweet t : current.getReplies()) {
+				toVisit.push(t);
+			}
+		}
+		while (!toVisit.isEmpty()) {
+			current = toVisit.pop();
+			after.add(current);
+			if (current.getReplies().isEmpty()) {
+				continue;
+			} else {
+				for (Tweet t : current.getReplies()) {
+					toVisit.push(t);
+				}
+			}
+		}
+		Collections.sort(filterDeleted(after));
+		context.setAfter(tweetMapper.entitiesToDtos(after));
+
+		return context;
+	}
+
+	@Override
+	public List<TweetResponseDto> getTweetReposts(Integer id) {
+		Tweet tweet = getTweet(id);
+		return tweetMapper.entitiesToDtos(filterDeleted(tweet.getReposts()));
 	}
 
 	private List<String> parse(String content, String regEx) {
