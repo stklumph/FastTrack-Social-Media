@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	private User getUserByUsername(String username) {
+	public User getUserByUsername(String username) {
 		Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
 		if (optionalUser.isEmpty()) {
 			throw new NotFoundException("No user found with username: " + username);
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 		return userMapper.entityToDto(getUserByUsername(username));
 	}
 
-	private void validateUserCredentials(User user, Credentials credentials) {
+	public void validateUserCredentials(User user, Credentials credentials) {
 		if (!user.getCredentials().equals(credentials)) {
 			throw new BadRequestException("Credentials invalid");
 		}

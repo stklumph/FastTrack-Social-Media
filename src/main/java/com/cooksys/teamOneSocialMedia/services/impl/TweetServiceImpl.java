@@ -19,6 +19,7 @@ import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
 import com.cooksys.teamOneSocialMedia.exceptions.BadRequestException;
 import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
+import com.cooksys.teamOneSocialMedia.mappers.CredentialsMapper;
 import com.cooksys.teamOneSocialMedia.mappers.HashtagMapper;
 import com.cooksys.teamOneSocialMedia.mappers.TweetMapper;
 import com.cooksys.teamOneSocialMedia.mappers.UserMapper;
@@ -26,6 +27,7 @@ import com.cooksys.teamOneSocialMedia.repositories.HashtagRepository;
 import com.cooksys.teamOneSocialMedia.repositories.TweetRepository;
 import com.cooksys.teamOneSocialMedia.repositories.UserRepository;
 import com.cooksys.teamOneSocialMedia.service.TweetService;
+import com.cooksys.teamOneSocialMedia.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +42,11 @@ public class TweetServiceImpl implements TweetService {
 
 	private final UserMapper userMapper;
 	private final UserRepository userRepository;
+
+	private final CredentialsMapper credentialsMapper;
+
+	// Dependency Injection of Service
+	private final UserService userService;
 
 	@Override
 	public List<TweetResponseDto> getAllTweets() {
@@ -119,67 +126,44 @@ public class TweetServiceImpl implements TweetService {
 		List<String> mentions = new ArrayList<>();
 		while (matcher.find()) {
 			// this adds the parsed string, without the "@" or the "#"
-			mentions.add(matcher.group().substring(1));
+			String group = matcher.group();
+			if (group.length() > 0) {
+				mentions.add(group.substring(1));
+			}
+			System.out.println("found: " + group);
 		}
 
 		return mentions;
 	}
 
-	private List<User> getMentionedUsers(List<String> usernames) {
-		List<User> users = new ArrayList<>();
-		for (String u : usernames) {
-			Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(u);
-			if (optionalUser.isPresent()) {
-				users.add(optionalUser.get());
-			}
-		}
-		return users;
-	}
-
 	private List<Hashtag> getTags(List<String> tags) {
-		List<Hashtag> users = new ArrayList<>();
-		for (String u : tags) {
-			Optional<Hashtag> optionalHashtag = hashtagRepository.findByLabel(u);
-			if (optionalHashtag.isPresent()) {
-				users.add(optionalHashtag.get());
-			}
+		List<Hashtag> hashtags = hashtagRepository.findByLabelIn(tags);
+		List<String> existingTags = new ArrayList<>();
+		for (Hashtag h : hashtags) {
+			existingTags.add(h.getLabel());
 		}
-		return users;
-	}
-
-	private User getUserByUsername(String username) {
-		Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
-		if (optionalUser.isEmpty()) {
-			throw new NotFoundException("No user found with username: " + username);
-		}
-		return optionalUser.get();
-	}
-
-//	private void validateUserCredentials(Credentials credentials) {
-//		User user = getUserByUsername(credentials.getUsername());
-//		if (!user.getCredentials().equals(credentials)) {
-//			throw new BadRequestException("Credentials invalid");
+		tags.removeAll(existingTags);
+		List<Hashtag> newHashtags = new ArrayList<>();
+//		for (String u : tags) {
+//			newHashtags.add(new Hashtag(u));
 //		}
-//	}
-	
-	 private void validateUserCredentials(User user, Credentials credentials) {
-	        if(!user.getCredentials().equals(credentials)) {
-	            throw new BadRequestException("Credentials invalid");
-	        }
-	    }
+		hashtagRepository.saveAllAndFlush(newHashtags);
+		return hashtags;
+	}
 
 	@Override
 	public TweetResponseDto createTweet(TweetRequestDto tweetRequestDto) {
 		Tweet newTweet = tweetMapper.requestDtoToEntity(tweetRequestDto);
-		Credentials credentials = new Credentials(tweetRequestDto.getCredentials().getUsername(),
-				tweetRequestDto.getCredentials().getPassword());
-		User user = getUserByUsername(credentials.getUsername());
-		validateUserCredentials(user, credentials);
+		Credentials credentials = credentialsMapper.dtoToEntity(tweetRequestDto.getCredentials());
+		User user = userService.getUserByUsername(credentials.getUsername());
+		userService.validateUserCredentials(user, credentials);
 		newTweet.setAuthor(user);
 		String content = tweetRequestDto.getContent();
-		final String ampersandRegEx = "^@";
-		final String tagRegEx = "^#";
-		newTweet.setUsersMentioned(getMentionedUsers(parse(content, ampersandRegEx)));
+		System.out.println("content : " + content);
+		final String ampersandRegEx = "@\\w*";
+		final String tagRegEx = "#\\w*";
+		newTweet.setUsersMentioned(
+				userRepository.findByDeletedFalseAndCredentialsUsernameIn((parse(content, ampersandRegEx))));
 		newTweet.setHashtags(getTags(parse(content, tagRegEx)));
 
 		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(newTweet));
