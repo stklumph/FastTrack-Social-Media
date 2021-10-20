@@ -32,4 +32,17 @@ public class UserController {
     public UserResponseDto getUser(@PathVariable String username){
         return userService.getUser(username);
     }
+
+    @PatchMapping ("/@{username}") //Updates the profile of a user with the given username. If no such user exists, the user is deleted, or the provided credentials do not match the user, an error should be sent in lieu of a response. In the case of a successful update, the returned user should contain the updated data.
+
+    public UserResponseDto patchUser(@RequestBody UserRequestDto userRequestDto) {
+        return userService.patchUser(userRequestDto);
+    }
+    @DeleteMapping ("/@{username}") // "Deletes" a user with the given username. If no such user exists or the provided credentials do not match the user, an error should be sent in lieu of a response. If a user is successfully "deleted", the response should contain the user data prior to deletion.
+    public UserResponseDto deleteUser(@RequestBody UserRequestDto userRequestDto){
+        return userService.deleteUser(userRequestDto);
+    }
+
+
+
 }

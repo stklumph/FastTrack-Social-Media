@@ -1,6 +1,5 @@
 package com.cooksys.teamOneSocialMedia.services.impl;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -22,50 +21,73 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
+	private final UserRepository userRepository;
+	private final UserMapper userMapper;
 
-    @Override
-    public List<UserResponseDto> getAllUsers() {
-        return userMapper.entitiesToDtos(userRepository.findByDeletedFalse());
-    }
+	@Override
+	public List<UserResponseDto> getAllUsers() {
+		return userMapper.entitiesToDtos(userRepository.findByDeletedFalse());
+	}
 
+	@Override
+	public UserResponseDto createUser(UserRequestDto userRequestDto) {
+		String username = userRequestDto.getCredentials().getUsername();
+		Optional<User> optionalUser = userRepository.findByCredentialsUsername(username);
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			if (user.isDeleted()) {
+				if (user.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
+					user.setDeleted(false);
+					userRepository.saveAndFlush(user);
+					return userMapper.entityToDto(userMapper.requestDtoToEntity(userRequestDto));
+				} else {
+					throw new BadRequestException("username : " + username + " is already taken");
+				}
+			} else {
+				throw new BadRequestException("username : " + username + " is already taken");
+			}
+		} // create user
+		else {
+			return userMapper.entityToDto(userRepository.saveAndFlush(userMapper.requestDtoToEntity(userRequestDto)));
+		}
 
-    @Override
-    public UserResponseDto createUser(UserRequestDto userRequestDto) {
-        String username = userRequestDto.getCredentials().getUsername();
-        Optional<User> optionalUser = userRepository.findByCredentialsUsername(username);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if(user.isDeleted()) {
-                if (user.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
-                    user.setDeleted(false);
-                    userRepository.saveAndFlush(user);
-                    return userMapper.entityToDto(userMapper.requestDtoToEntity(userRequestDto));
-                }
-                else {
-                    throw new BadRequestException("username : " + username + " is already taken");
-                }
-            }
-            else {
-                throw new BadRequestException("username : " + username + " is already taken");
-            }
-        }//create user
-        else {return userMapper.entityToDto(userRepository.saveAndFlush(userMapper.requestDtoToEntity(userRequestDto)));
-        }
+	}
 
-    }
-    
-    private User getUserByUsername(String username) {
-        Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
-        if (optionalUser.isEmpty()) {
-            throw new NotFoundException("No user found with username: " + username);
-        }
-        return optionalUser.get();
-    }
-    @Override
-    public UserResponseDto getUser(String username) {
-        return userMapper.entityToDto(getUserByUsername(username));
-    }
+	private User getUserByUsername(String username) {
+		Optional<User> optionalUser = userRepository.findByCredentialsUsernameAndDeletedFalse(username);
+		if (optionalUser.isEmpty()) {
+			throw new NotFoundException("No user found with username: " + username);
+		}
+		return optionalUser.get();
+	}
+
+	@Override
+	public UserResponseDto getUser(String username) {
+		return userMapper.entityToDto(getUserByUsername(username));
+	}
+
+	private void validateUserCredentials(User user, Credentials credentials) {
+		if (!user.getCredentials().equals(credentials)) {
+			throw new BadRequestException("Credentials invalid");
+		}
+	}
+
+	@Override
+	public UserResponseDto patchUser(UserRequestDto userRequestDto) {
+		User user = getUserByUsername(userRequestDto.getCredentials().getUsername());
+		User userCheck = userMapper.requestDtoToEntity(userRequestDto);
+		validateUserCredentials(user, userCheck.getCredentials());
+		user.setProfile(userCheck.getProfile());
+		return userMapper.entityToDto(userRepository.saveAndFlush(user));
+	}
+
+	@Override
+	public UserResponseDto deleteUser(UserRequestDto userRequestDto) {
+		User user = getUserByUsername(userRequestDto.getCredentials().getUsername());
+		User userCheck = userMapper.requestDtoToEntity(userRequestDto);
+		validateUserCredentials(user, userCheck.getCredentials());
+		user.setDeleted(true);
+		return userMapper.entityToDto(userRepository.saveAndFlush(user));
+	}
 
 }
