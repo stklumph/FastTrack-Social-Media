@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void followUser(String username, CredentialsDto credentialsDto) {
 		User user = getUserByUsername(credentialsDto.getUsername());
-		validateUserCredentials(user, credentialsMapper.DtoToEntity(credentialsDto));
+		validateUserCredentials(user, credentialsMapper.dtoToEntity(credentialsDto));
 		User userToFollow = getUserByUsername(username);
 		userToFollow.userFollowing(user);
 		userRepository.saveAndFlush(userToFollow);
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void unfollowUser(String username, CredentialsDto credentialsDto) {
 		User user = getUserByUsername(credentialsDto.getUsername());
-		validateUserCredentials(user, credentialsMapper.DtoToEntity(credentialsDto));
+		validateUserCredentials(user, credentialsMapper.dtoToEntity(credentialsDto));
 		User userToFollow = getUserByUsername(username);
 		userToFollow.userUnfollowing(user);
 		userRepository.saveAndFlush(userToFollow);

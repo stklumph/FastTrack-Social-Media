@@ -17,7 +17,6 @@ import com.cooksys.teamOneSocialMedia.entities.Hashtag;
 import com.cooksys.teamOneSocialMedia.entities.Tweet;
 import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
-import com.cooksys.teamOneSocialMedia.exceptions.BadRequestException;
 import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
 import com.cooksys.teamOneSocialMedia.mappers.CredentialsMapper;
 import com.cooksys.teamOneSocialMedia.mappers.HashtagMapper;
@@ -144,10 +143,14 @@ public class TweetServiceImpl implements TweetService {
 		}
 		tags.removeAll(existingTags);
 		List<Hashtag> newHashtags = new ArrayList<>();
-//		for (String u : tags) {
-//			newHashtags.add(new Hashtag(u));
-//		}
-		hashtagRepository.saveAllAndFlush(newHashtags);
+		Hashtag newTag = new Hashtag();
+		for (String u : tags) {
+			newTag.setLabel(u);
+			newHashtags.add(newTag);
+			System.out.println("Creating new tag: " + u);
+		}
+		hashtags.addAll(hashtagRepository.saveAllAndFlush(newHashtags));
+
 		return hashtags;
 	}
 
@@ -163,7 +166,7 @@ public class TweetServiceImpl implements TweetService {
 		final String ampersandRegEx = "@\\w*";
 		final String tagRegEx = "#\\w*";
 		newTweet.setUsersMentioned(
-				userRepository.findByDeletedFalseAndCredentialsUsernameIn((parse(content, ampersandRegEx))));
+				userRepository.findByDeletedFalseAndCredentialsUsernameIn(parse(content, ampersandRegEx)));
 		newTweet.setHashtags(getTags(parse(content, tagRegEx)));
 
 		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(newTweet));
