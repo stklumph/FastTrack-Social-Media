@@ -78,6 +78,13 @@ public class TweetController {
 	public ContextDto getTweetContext(@PathVariable Integer id) {
 		return tweetService.getTweetContext(id);
 	}
+	
+	//Retrieves the direct reposts of the tweet with the given id. If that tweet is 
+	//deleted or otherwise doesn't exist, an error should be sent in lieu of a response.
+	@GetMapping("/{id}/reposts")
+	public List<TweetResponseDto> getTweetReposts(@PathVariable Integer id){
+		return tweetService.getTweetReposts(id);
+	}
 
 	// Creates a tweet from a tweetRequestDto
 	@PostMapping
@@ -86,6 +93,13 @@ public class TweetController {
 	}
 
 }
+
+
+
+
+
+
+
 
 
 

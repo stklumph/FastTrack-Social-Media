@@ -136,6 +136,7 @@ public class Seeder implements CommandLineRunner {
 		// replies.add(t1);
 		// replies.add(t2);
 		t3.setInReplyTo(t2);
+		t3.setRepostOf(t2);
 
 		Hashtag h5 = new Hashtag();
 		h5.setLabel("triple");

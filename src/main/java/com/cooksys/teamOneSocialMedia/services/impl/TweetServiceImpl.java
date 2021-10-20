@@ -153,6 +153,12 @@ public class TweetServiceImpl implements TweetService {
 		return context;
 	}
 
+	@Override
+	public List<TweetResponseDto> getTweetReposts(Integer id) {
+		Tweet tweet = getTweet(id);
+		return tweetMapper.entitiesToDtos(filterDeleted(tweet.getReposts()));
+	}
+
 }
 
 

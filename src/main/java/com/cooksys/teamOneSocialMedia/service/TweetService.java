@@ -26,4 +26,6 @@ public interface TweetService {
 
 	ContextDto getTweetContext(Integer id);
 
+	List<TweetResponseDto> getTweetReposts(Integer id);
+
 }
