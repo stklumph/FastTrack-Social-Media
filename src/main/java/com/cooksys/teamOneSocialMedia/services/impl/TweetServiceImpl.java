@@ -165,7 +165,7 @@ public class TweetServiceImpl implements TweetService {
 	@Override
 	public List<TweetResponseDto> getAllTweetsByUser(String username) {
 		Optional<User> user = userRepository.findByCredentialsUsername(username);
-		if (user.isPresent()){
+		if (user.isPresent()) {
 			return tweetMapper.entitiesToDtos(tweetRepository.findByAuthorAndDeletedFalse(user.get()));
 		} else {
 			return null;
@@ -182,7 +182,6 @@ public class TweetServiceImpl implements TweetService {
 			if (group.length() > 0) {
 				mentions.add(group.substring(1));
 			}
-			System.out.println("found: " + group);
 		}
 
 		return mentions;
@@ -200,7 +199,6 @@ public class TweetServiceImpl implements TweetService {
 		for (String u : tags) {
 			newTag.setLabel(u);
 			newHashtags.add(newTag);
-			System.out.println("Creating new tag: " + u);
 		}
 		hashtags.addAll(hashtagRepository.saveAllAndFlush(newHashtags));
 
@@ -215,7 +213,6 @@ public class TweetServiceImpl implements TweetService {
 		userService.validateUserCredentials(user, credentials);
 		newTweet.setAuthor(user);
 		String content = tweetRequestDto.getContent();
-		System.out.println("content : " + content);
 		final String ampersandRegEx = "@\\w*";
 		final String tagRegEx = "#\\w*";
 		newTweet.setUsersMentioned(
@@ -229,7 +226,7 @@ public class TweetServiceImpl implements TweetService {
 	public TweetResponseDto deleteTweetById(Integer id, CredentialsDto credentialsDto) {
 		Tweet tweet = getTweet(id);
 		userService.validateUserCredentials(tweet.getAuthor(), credentialsMapper.dtoToEntity(credentialsDto));
-		
+
 		tweet.setDeleted(true);
 		tweetRepository.saveAndFlush(tweet);
 		return tweetMapper.entityToDto(tweet);
@@ -250,9 +247,28 @@ public class TweetServiceImpl implements TweetService {
 		return tweetMapper.entitiesToDtos(filterDeleted(feed));
 	}
 
+
+
+
+	public void postLike(Integer id, CredentialsDto credentialsDto) {
+		User user = userService.getUserByUsername(credentialsDto.getUsername());
+		userService.validateUserCredentials(user, credentialsMapper.dtoToEntity(credentialsDto));
+		Tweet tweet = getTweet(id);
+		if (!tweet.getLikes().contains(user)) {
+			tweet.addLike(user);
+		}
+		tweetRepository.saveAndFlush(tweet);
+	}
+
+	@Override
+	public TweetResponseDto repostTweet(Integer id, CredentialsDto credentialsDto) {
+		User user = userService.getUserByUsername(credentialsDto.getUsername());
+		userService.validateUserCredentials(user, credentialsMapper.dtoToEntity(credentialsDto));
+		Tweet tweetToRepost = getTweet(id);
+		Tweet repostTweet = new Tweet();
+		repostTweet.setRepostOf(tweetToRepost);
+		repostTweet.setAuthor(user);
+		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(repostTweet));
+	}
+
 }
-
-
-
-
-

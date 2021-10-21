@@ -87,7 +87,7 @@ public class Seeder implements CommandLineRunner {
 		t2.setContent("Entry 2");
 
 		Hashtag h3 = new Hashtag();
-		h3.setLabel("introduction");
+		h3.setLabel("introduction2");
 		Hashtag h4 = new Hashtag();
 		h4.setLabel("new");
 
