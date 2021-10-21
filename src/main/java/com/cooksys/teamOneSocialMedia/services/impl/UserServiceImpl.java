@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.Deleted;
+import com.cooksys.teamOneSocialMedia.mappers.TweetMapper;
 import org.springframework.stereotype.Service;
 
 import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final UserMapper userMapper;
+	private final TweetMapper tweetMapper;
 	private final CredentialsMapper credentialsMapper;
 
 	@Override
@@ -139,5 +142,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserResponseDto> getFollowing(String username) {
 		return userMapper.entitiesToDtos(filterDeleted(getUserByUsername(username).getFollowing()));
+	}
+
+	@Override
+	public List<TweetResponseDto> getMentions(String username) {
+		return tweetMapper.entitiesToDtos(filterDeleted(getUserByUsername(username).getMentions()));
 	}
 }

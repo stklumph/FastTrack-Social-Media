@@ -229,7 +229,7 @@ public class TweetServiceImpl implements TweetService {
 		}
 		TweetCompareReverse tcr = new TweetCompareReverse();
 		feed.sort(tcr);
-		return tweetMapper.entitiesToDtos(filterDeleted(feed));
+		return tweetMapper.entitiesToDtos(userService.filterDeleted(feed));
 	}
 
 

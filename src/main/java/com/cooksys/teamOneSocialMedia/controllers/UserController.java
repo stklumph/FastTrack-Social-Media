@@ -79,16 +79,19 @@ public class UserController {
     }
     
 
-    @GetMapping("/users/@{username}/followers")
+    @GetMapping("/users/@{username}/followers") //Retrieves the users followed by the user with the given username. Only active users should be included in the response. If no active user with the given username exists, an error should be sent in lieu of a response.
     public List<UserResponseDto> getFollowers(@PathVariable String username){
         return userService.getFollowers(username);
     }
 
-    @GetMapping("/users/@{username}/following")
+    @GetMapping("/users/@{username}/following") //Retrieves the followers of the user with the given username. Only active users should be included in the response. If no active user with the given username exists, an error should be sent in lieu of a response.
     public List<UserResponseDto> getFollowing(@PathVariable String username){
         return userService.getFollowing(username);
     }
-
+    @GetMapping ("/users/@{username}/mentions") //Retrieves all (non-deleted) tweets in which the user with the given username is mentioned. The tweets should appear in reverse-chronological order. If no active user with that username exists, an error should be sent in lieu of a response.   A user is considered "mentioned" by a tweet if the tweet has content and the user's username appears in that content following a @
+    public List<TweetResponseDto> getMentions(@PathVariable String username) {
+        return userService.getMentions(username);
+    }
 }
 
 

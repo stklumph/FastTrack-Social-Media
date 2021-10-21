@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
 
+import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.Deleted;
@@ -37,4 +38,6 @@ public interface UserService {
     <T extends Deleted>List<T> filterDeleted(List<T> likes);
 
     List<UserResponseDto> getFollowing(String username);
+
+    List<TweetResponseDto> getMentions(String username);
 }
