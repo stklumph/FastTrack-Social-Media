@@ -170,7 +170,6 @@ public class TweetServiceImpl implements TweetService {
 			if (group.length() > 0) {
 				mentions.add(group.substring(1));
 			}
-			System.out.println("found: " + group);
 		}
 
 		return mentions;
@@ -188,7 +187,6 @@ public class TweetServiceImpl implements TweetService {
 		for (String u : tags) {
 			newTag.setLabel(u);
 			newHashtags.add(newTag);
-			System.out.println("Creating new tag: " + u);
 		}
 		hashtags.addAll(hashtagRepository.saveAllAndFlush(newHashtags));
 
@@ -203,7 +201,6 @@ public class TweetServiceImpl implements TweetService {
 		userService.validateUserCredentials(user, credentials);
 		newTweet.setAuthor(user);
 		String content = tweetRequestDto.getContent();
-		System.out.println("content : " + content);
 		final String ampersandRegEx = "@\\w*";
 		final String tagRegEx = "#\\w*";
 		newTweet.setUsersMentioned(
