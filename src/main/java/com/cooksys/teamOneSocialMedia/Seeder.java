@@ -134,10 +134,10 @@ public class Seeder implements CommandLineRunner {
 		likes.add(u1);
 		likes.add(u2);
 		t3.setLikes(likes);
-		List<User> mentions = new ArrayList<>();
-		mentions.addAll(likes);
-		mentions.add(u3);
-		t3.setUsersMentioned(mentions);
+		//List<User> mentions = new ArrayList<>();
+		//mentions.addAll(likes);
+		//mentions.add(u3);
+		//t3.setUsersMentioned(mentions);
 		// List<Tweet> replies = new ArrayList<>();
 		// replies.add(t1);
 		// replies.add(t2);
