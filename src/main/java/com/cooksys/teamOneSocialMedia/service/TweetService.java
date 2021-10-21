@@ -31,4 +31,6 @@ public interface TweetService {
 
 	TweetResponseDto deleteTweetById(Integer id, CredentialsDto credentialsDto);
 
+	List<TweetResponseDto> getAllTweetsByUser(String username);
+
 }

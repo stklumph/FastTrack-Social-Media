@@ -53,12 +53,6 @@ public class TweetServiceImpl implements TweetService {
 
 	@Override
 	public List<TweetResponseDto> getAllTweets() {
-//		List<Tweet> all = tweetRepository.findByDeletedFalseOrderByPostedDesc();
-//		for(Tweet t: all) {
-//			t.setReplies(filterDeleted(t.getReplies()));
-//			t.setReposts(filterDeleted(t.getReposts()));
-//		}
-//		return tweetMapper.entitiesToDtos(all);
 		return tweetMapper.entitiesToDtos(tweetRepository.findByDeletedFalseOrderByPostedDesc());
 	}
 
@@ -165,6 +159,16 @@ public class TweetServiceImpl implements TweetService {
 	public List<TweetResponseDto> getTweetReposts(Integer id) {
 		Tweet tweet = getTweet(id);
 		return tweetMapper.entitiesToDtos(filterDeleted(tweet.getReposts()));
+	}
+
+	@Override
+	public List<TweetResponseDto> getAllTweetsByUser(String username) {
+		Optional<User> user = userRepository.findByCredentialsUsername(username);
+		if (user.isPresent()){
+			return tweetMapper.entitiesToDtos(tweetRepository.findByAuthorAndDeletedFalse(user.get()));
+		} else {
+			return null;
+		}
 	}
 
 	private List<String> parse(String content, String regEx) {
