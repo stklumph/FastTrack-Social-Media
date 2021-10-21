@@ -2,6 +2,7 @@ package com.cooksys.teamOneSocialMedia.controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksys.teamOneSocialMedia.dtos.ContextDto;
+import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
 import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
@@ -84,6 +86,12 @@ public class TweetController {
 	@GetMapping("/{id}/reposts")
 	public List<TweetResponseDto> getTweetReposts(@PathVariable Integer id){
 		return tweetService.getTweetReposts(id);
+	}
+	
+	//"Deletes" the tweet with the given id
+	@DeleteMapping("/{id}")
+	public TweetResponseDto deleteTweetById(@PathVariable Integer id, @RequestBody CredentialsDto credentialsDto) {
+		return tweetService.deleteTweetById(id, credentialsDto);
 	}
 
 	// Creates a tweet from a tweetRequestDto

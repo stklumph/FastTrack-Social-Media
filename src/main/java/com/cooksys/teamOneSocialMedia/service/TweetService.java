@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cooksys.teamOneSocialMedia.dtos.TweetRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.ContextDto;
+import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
 import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
@@ -27,5 +28,7 @@ public interface TweetService {
 	ContextDto getTweetContext(Integer id);
 
 	List<TweetResponseDto> getTweetReposts(Integer id);
+
+	TweetResponseDto deleteTweetById(Integer id, CredentialsDto credentialsDto);
 
 }
