@@ -55,5 +55,21 @@ public class UserController {
     public List<TweetResponseDto> getUserTweets(@PathVariable String username){
         return tweetService.getAllTweetsByUser(username);
     }
+    
+    //Retrieves all (non-deleted) tweets authored by the user with the given username,
+    //as well as all (non-deleted) tweets authored by users the given user is following
+    @GetMapping("@{username}/feed")
+    public List<TweetResponseDto> getUserFeed(@PathVariable String username){
+    	return tweetService.getUserFeed(username);
+    }
+    
 
 }
+
+
+
+
+
+
+
+

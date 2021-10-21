@@ -33,4 +33,6 @@ public interface TweetService {
 
 	List<TweetResponseDto> getAllTweetsByUser(String username);
 
+	List<TweetResponseDto> getUserFeed(String username);
+
 }
