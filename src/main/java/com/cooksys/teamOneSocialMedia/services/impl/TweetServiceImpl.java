@@ -160,6 +160,16 @@ public class TweetServiceImpl implements TweetService {
 		return tweetMapper.entitiesToDtos(filterDeleted(tweet.getReposts()));
 	}
 
+	@Override
+	public List<TweetResponseDto> getAllTweetsByUser(String username) {
+		Optional<User> user = userRepository.findByCredentialsUsername(username);
+		if (user.isPresent()){
+			return tweetMapper.entitiesToDtos(tweetRepository.findByAuthorAndDeletedFalse(user.get()));
+		} else {
+			return null;
+		}
+	}
+
 	private List<String> parse(String content, String regEx) {
 		Pattern pattern = Pattern.compile(regEx);
 		Matcher matcher = pattern.matcher(content);
