@@ -37,4 +37,6 @@ public interface TweetService {
 
 	TweetResponseDto repostTweet(Integer id, CredentialsDto credentialsDto);
 
+	TweetResponseDto createReplyTweet(Integer id, TweetRequestDto tweetRequestDto);
+
 }

@@ -204,8 +204,7 @@ public class TweetServiceImpl implements TweetService {
 		return hashtags;
 	}
 
-	@Override
-	public TweetResponseDto createTweet(TweetRequestDto tweetRequestDto) {
+	private Tweet createTweetObjectFromDto(TweetRequestDto tweetRequestDto) {
 		Tweet newTweet = tweetMapper.requestDtoToEntity(tweetRequestDto);
 		Credentials credentials = credentialsMapper.dtoToEntity(tweetRequestDto.getCredentials());
 		User user = userService.getUserByUsername(credentials.getUsername());
@@ -217,8 +216,12 @@ public class TweetServiceImpl implements TweetService {
 		newTweet.setUsersMentioned(
 				userRepository.findByDeletedFalseAndCredentialsUsernameIn(parse(content, ampersandRegEx)));
 		newTweet.setHashtags(getTags(parse(content, tagRegEx)));
+		return newTweet;
+	}
 
-		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(newTweet));
+	@Override
+	public TweetResponseDto createTweet(TweetRequestDto tweetRequestDto) {
+		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(createTweetObjectFromDto(tweetRequestDto)));
 	}
 
 	@Override
@@ -251,6 +254,13 @@ public class TweetServiceImpl implements TweetService {
 		repostTweet.setRepostOf(tweetToRepost);
 		repostTweet.setAuthor(user);
 		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(repostTweet));
+	}
+
+	@Override
+	public TweetResponseDto createReplyTweet(Integer id, TweetRequestDto tweetRequestDto) {
+		Tweet reply = createTweetObjectFromDto(tweetRequestDto);
+		reply.setInReplyTo(getTweet(id));
+		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(reply));
 	}
 
 }
