@@ -19,6 +19,7 @@ import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.Deleted;
 import com.cooksys.teamOneSocialMedia.entities.Hashtag;
 import com.cooksys.teamOneSocialMedia.entities.Tweet;
+import com.cooksys.teamOneSocialMedia.entities.TweetCompareReverse;
 import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
 import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
@@ -66,22 +67,7 @@ public class TweetServiceImpl implements TweetService {
 	}
 
 	// helper method
-	public <T extends Deleted> List<T> filterDeleted(List<T> filter) {
-		if (filter.isEmpty()) {
-			return filter;
-		}
-		List<T> remove = new ArrayList<>();
-		for (T t : filter) {
-			if (t == null) {
-				continue;
-			}
-			if (t.isDeleted()) {
-				remove.add(t);
-			}
-		}
-		filter.removeAll(remove);
-		return filter;
-	}
+	
 
 	@Override
 	public TweetResponseDto getTweetById(Integer id) {
@@ -97,21 +83,21 @@ public class TweetServiceImpl implements TweetService {
 	@Override
 	public List<UserResponseDto> getTweetLikes(Integer id) {
 		Tweet tweet = getTweet(id);
-		List<User> userLikes = filterDeleted(tweet.getLikes());
+		List<User> userLikes = userService.filterDeleted(tweet.getLikes());
 		return userMapper.entitiesToDtos(userLikes);
 	}
 
 	@Override
 	public List<UserResponseDto> getTweetMentions(Integer id) {
 		Tweet tweet = getTweet(id);
-		List<User> userMentions = filterDeleted(tweet.getUsersMentioned());
+		List<User> userMentions = userService.filterDeleted(tweet.getUsersMentioned());
 		return userMapper.entitiesToDtos(userMentions);
 	}
 
 	@Override
 	public List<TweetResponseDto> getTweetReplies(Integer id) {
 		Tweet tweet = getTweet(id);
-		List<Tweet> replies = filterDeleted(tweet.getReplies());
+		List<Tweet> replies = userService.filterDeleted(tweet.getReplies());
 		return tweetMapper.entitiesToDtos(replies);
 	}
 
@@ -128,7 +114,7 @@ public class TweetServiceImpl implements TweetService {
 			before.add(0, current.getInReplyTo());
 		}
 
-		context.setBefore(tweetMapper.entitiesToDtos(filterDeleted(before)));
+		context.setBefore(tweetMapper.entitiesToDtos(userService.filterDeleted(before)));
 
 		Stack<Tweet> toVisit = new Stack<>();
 		List<Tweet> after = new ArrayList<>();
@@ -149,7 +135,7 @@ public class TweetServiceImpl implements TweetService {
 				}
 			}
 		}
-		Collections.sort(filterDeleted(after));
+		Collections.sort(userService.filterDeleted(after));
 		context.setAfter(tweetMapper.entitiesToDtos(after));
 
 		return context;
@@ -158,7 +144,7 @@ public class TweetServiceImpl implements TweetService {
 	@Override
 	public List<TweetResponseDto> getTweetReposts(Integer id) {
 		Tweet tweet = getTweet(id);
-		return tweetMapper.entitiesToDtos(filterDeleted(tweet.getReposts()));
+		return tweetMapper.entitiesToDtos(userService.filterDeleted(tweet.getReposts()));
 	}
 
 	@Override
@@ -235,6 +221,23 @@ public class TweetServiceImpl implements TweetService {
 	}
 
 	@Override
+	public List<TweetResponseDto> getUserFeed(String username) {
+		User user = userService.getUserByUsername(username);
+		List<Tweet> feed = new ArrayList<>();
+		feed.addAll(user.getTweets());
+		for (User u: user.getFollowing()) {
+			if(!u.isDeleted()) {
+				feed.addAll(u.getTweets());
+			}
+		}
+		TweetCompareReverse tcr = new TweetCompareReverse();
+		feed.sort(tcr);
+		return tweetMapper.entitiesToDtos(filterDeleted(feed));
+	}
+
+
+
+
 	public void postLike(Integer id, CredentialsDto credentialsDto) {
 		User user = userService.getUserByUsername(credentialsDto.getUsername());
 		userService.validateUserCredentials(user, credentialsMapper.dtoToEntity(credentialsDto));

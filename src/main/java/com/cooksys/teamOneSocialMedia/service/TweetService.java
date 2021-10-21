@@ -33,6 +33,9 @@ public interface TweetService {
 
 	List<TweetResponseDto> getAllTweetsByUser(String username);
 
+
+	List<TweetResponseDto> getUserFeed(String username);
+
 	void postLike(Integer id, CredentialsDto credentialsDto);
 
 	TweetResponseDto repostTweet(Integer id, CredentialsDto credentialsDto);

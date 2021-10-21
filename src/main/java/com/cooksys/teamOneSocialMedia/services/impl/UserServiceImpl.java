@@ -1,8 +1,10 @@
 package com.cooksys.teamOneSocialMedia.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.cooksys.teamOneSocialMedia.entities.Deleted;
 import org.springframework.stereotype.Service;
 
 import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
@@ -18,6 +20,7 @@ import com.cooksys.teamOneSocialMedia.repositories.UserRepository;
 import com.cooksys.teamOneSocialMedia.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,24 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserResponseDto> getAllUsers() {
 		return userMapper.entitiesToDtos(userRepository.findByDeletedFalse());
+	}
+
+	@Override
+	public <T extends Deleted> List<T> filterDeleted(List<T> filter) {
+		if (filter.isEmpty()) {
+			return filter;
+		}
+		List<T> remove = new ArrayList<>();
+		for (T t : filter) {
+			if (t == null) {
+				continue;
+			}
+			if (t.isDeleted()) {
+				remove.add(t);
+			}
+		}
+		filter.removeAll(remove);
+		return filter;
 	}
 
 	@Override
@@ -111,4 +132,12 @@ public class UserServiceImpl implements UserService {
 		userRepository.saveAndFlush(userToFollow);
 	}
 
+	@Override
+	public List<UserResponseDto> getFollowers(String username) {
+		return userMapper.entitiesToDtos(filterDeleted(getUserByUsername(username).getFollowers()));
+	}
+	@Override
+	public List<UserResponseDto> getFollowing(String username) {
+		return userMapper.entitiesToDtos(filterDeleted(getUserByUsername(username).getFollowing()));
+	}
 }

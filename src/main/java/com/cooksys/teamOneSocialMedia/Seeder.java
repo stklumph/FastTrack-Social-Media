@@ -64,7 +64,7 @@ public class Seeder implements CommandLineRunner {
 
 		hashtagRepository.saveAndFlush(h1);
 		hashtagRepository.saveAndFlush(h2);
-		userRepository.saveAndFlush(u1);
+		u1 = userRepository.saveAndFlush(u1);
 		tweetRepository.saveAndFlush(t1);
 		// _Entry
 		// 2___________________________________________________________________________________
@@ -103,7 +103,7 @@ public class Seeder implements CommandLineRunner {
 
 		hashtagRepository.saveAndFlush(h3);
 		hashtagRepository.saveAndFlush(h4);
-		userRepository.saveAndFlush(u2);
+		u2 = userRepository.saveAndFlush(u2);
 		tweetRepository.saveAndFlush(t2);
 		// _Entry
 		// 3___________________________________________________________________________________
@@ -112,7 +112,13 @@ public class Seeder implements CommandLineRunner {
 		c3.setUsername("username3");
 		c3.setPassword("password3");
 		u3.setCredentials(c3);
-
+		
+		List<User> follows = new ArrayList<>();
+		follows.add(u1);
+		follows.add(u2);
+		u3.setFollowing(follows);
+		
+		
 		Profile p3 = new Profile();
 		p3.setEmail("email3@email.com");
 		p3.setFirstName("You");
@@ -153,11 +159,17 @@ public class Seeder implements CommandLineRunner {
 		h6.setFirstUsed(Timestamp.valueOf(LocalDateTime.now()));
 		h6.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
 
+		
 		hashtagRepository.saveAndFlush(h5);
 		hashtagRepository.saveAndFlush(h6);
 		userRepository.saveAndFlush(u3);
 		tweetRepository.saveAndFlush(t3);
-
+//		u1 = userRepository.findByCredentialsUsername("username1").get();
+//		u2 = userRepository.findByCredentialsUsername("username2").get();
+//		u3 = userRepository.findByCredentialsUsername("username3").get();
+//		u1.userFollowing(u3);
+//		u1.userFollowing(u2);
+//		userRepository.saveAndFlush(u1);
 	}
 
 }
