@@ -99,7 +99,11 @@ public class TweetController {
 	public TweetResponseDto createTweet(@RequestBody TweetRequestDto tweetRequestDto) {
 		return tweetService.createTweet(tweetRequestDto);
 	}
-
+	
+	@PostMapping("/{id}/like")
+	public void postLike(@PathVariable Integer id, @RequestBody CredentialsDto credentialsDto) {
+		tweetService.postLike(id, credentialsDto);
+	}
 }
 
 

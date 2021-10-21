@@ -70,6 +70,10 @@ public class Tweet implements Deleted, Comparable<Tweet>{
 	public int compareTo(Tweet t) {
 		return this.getPosted().compareTo(t.getPosted());
 	}
+
+	public void addLike(User user) {
+		likes.add(user);		
+	}
 }
 
 

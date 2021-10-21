@@ -164,7 +164,7 @@ public class TweetServiceImpl implements TweetService {
 	@Override
 	public List<TweetResponseDto> getAllTweetsByUser(String username) {
 		Optional<User> user = userRepository.findByCredentialsUsername(username);
-		if (user.isPresent()){
+		if (user.isPresent()) {
 			return tweetMapper.entitiesToDtos(tweetRepository.findByAuthorAndDeletedFalse(user.get()));
 		} else {
 			return null;
@@ -225,15 +225,21 @@ public class TweetServiceImpl implements TweetService {
 	public TweetResponseDto deleteTweetById(Integer id, CredentialsDto credentialsDto) {
 		Tweet tweet = getTweet(id);
 		userService.validateUserCredentials(tweet.getAuthor(), credentialsMapper.dtoToEntity(credentialsDto));
-		
+
 		tweet.setDeleted(true);
 		tweetRepository.saveAndFlush(tweet);
 		return tweetMapper.entityToDto(tweet);
 	}
 
+	@Override
+	public void postLike(Integer id, CredentialsDto credentialsDto) {
+		User user = userService.getUserByUsername(credentialsDto.getUsername());
+		userService.validateUserCredentials(user, credentialsMapper.dtoToEntity(credentialsDto));
+		Tweet tweet = getTweet(id);
+		if (!tweet.getLikes().contains(user)) {
+			tweet.addLike(user);
+		}
+		tweetRepository.saveAndFlush(tweet);
+	}
+
 }
-
-
-
-
-

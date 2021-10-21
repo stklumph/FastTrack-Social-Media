@@ -33,4 +33,6 @@ public interface TweetService {
 
 	List<TweetResponseDto> getAllTweetsByUser(String username);
 
+	void postLike(Integer id, CredentialsDto credentialsDto);
+
 }
