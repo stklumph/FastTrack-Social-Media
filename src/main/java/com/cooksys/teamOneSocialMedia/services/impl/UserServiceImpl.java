@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.cooksys.teamOneSocialMedia.entities.Deleted;
 import org.springframework.stereotype.Service;
 
 import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
+import com.cooksys.teamOneSocialMedia.entities.Deleted;
 import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
 import com.cooksys.teamOneSocialMedia.exceptions.BadRequestException;
@@ -20,7 +20,6 @@ import com.cooksys.teamOneSocialMedia.repositories.UserRepository;
 import com.cooksys.teamOneSocialMedia.service.UserService;
 
 import lombok.RequiredArgsConstructor;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -136,6 +135,7 @@ public class UserServiceImpl implements UserService {
 	public List<UserResponseDto> getFollowers(String username) {
 		return userMapper.entitiesToDtos(filterDeleted(getUserByUsername(username).getFollowers()));
 	}
+
 	@Override
 	public List<UserResponseDto> getFollowing(String username) {
 		return userMapper.entitiesToDtos(filterDeleted(getUserByUsername(username).getFollowing()));
