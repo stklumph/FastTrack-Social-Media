@@ -19,6 +19,7 @@ import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.Deleted;
 import com.cooksys.teamOneSocialMedia.entities.Hashtag;
 import com.cooksys.teamOneSocialMedia.entities.Tweet;
+import com.cooksys.teamOneSocialMedia.entities.TweetCompareReverse;
 import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
 import com.cooksys.teamOneSocialMedia.exceptions.NotFoundException;
@@ -217,6 +218,23 @@ public class TweetServiceImpl implements TweetService {
 	}
 
 	@Override
+	public List<TweetResponseDto> getUserFeed(String username) {
+		User user = userService.getUserByUsername(username);
+		List<Tweet> feed = new ArrayList<>();
+		feed.addAll(user.getTweets());
+		for (User u: user.getFollowing()) {
+			if(!u.isDeleted()) {
+				feed.addAll(u.getTweets());
+			}
+		}
+		TweetCompareReverse tcr = new TweetCompareReverse();
+		feed.sort(tcr);
+		return tweetMapper.entitiesToDtos(filterDeleted(feed));
+	}
+
+
+
+
 	public void postLike(Integer id, CredentialsDto credentialsDto) {
 		User user = userService.getUserByUsername(credentialsDto.getUsername());
 		userService.validateUserCredentials(user, credentialsMapper.dtoToEntity(credentialsDto));
@@ -225,6 +243,17 @@ public class TweetServiceImpl implements TweetService {
 			tweet.addLike(user);
 		}
 		tweetRepository.saveAndFlush(tweet);
+	}
+
+	@Override
+	public TweetResponseDto repostTweet(Integer id, CredentialsDto credentialsDto) {
+		User user = userService.getUserByUsername(credentialsDto.getUsername());
+		userService.validateUserCredentials(user, credentialsMapper.dtoToEntity(credentialsDto));
+		Tweet tweetToRepost = getTweet(id);
+		Tweet repostTweet = new Tweet();
+		repostTweet.setRepostOf(tweetToRepost);
+		repostTweet.setAuthor(user);
+		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(repostTweet));
 	}
 
 }
