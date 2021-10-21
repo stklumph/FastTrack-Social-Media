@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.springframework.stereotype.Service;
 
 import com.cooksys.teamOneSocialMedia.dtos.ContextDto;
+import com.cooksys.teamOneSocialMedia.dtos.CredentialsDto;
 import com.cooksys.teamOneSocialMedia.dtos.HashtagDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
@@ -160,6 +161,16 @@ public class TweetServiceImpl implements TweetService {
 		return tweetMapper.entitiesToDtos(filterDeleted(tweet.getReposts()));
 	}
 
+	@Override
+	public List<TweetResponseDto> getAllTweetsByUser(String username) {
+		Optional<User> user = userRepository.findByCredentialsUsername(username);
+		if (user.isPresent()){
+			return tweetMapper.entitiesToDtos(tweetRepository.findByAuthorAndDeletedFalse(user.get()));
+		} else {
+			return null;
+		}
+	}
+
 	private List<String> parse(String content, String regEx) {
 		Pattern pattern = Pattern.compile(regEx);
 		Matcher matcher = pattern.matcher(content);
@@ -210,4 +221,19 @@ public class TweetServiceImpl implements TweetService {
 		return tweetMapper.entityToDto(tweetRepository.saveAndFlush(newTweet));
 	}
 
+	@Override
+	public TweetResponseDto deleteTweetById(Integer id, CredentialsDto credentialsDto) {
+		Tweet tweet = getTweet(id);
+		userService.validateUserCredentials(tweet.getAuthor(), credentialsMapper.dtoToEntity(credentialsDto));
+		
+		tweet.setDeleted(true);
+		tweetRepository.saveAndFlush(tweet);
+		return tweetMapper.entityToDto(tweet);
+	}
+
 }
+
+
+
+
+
