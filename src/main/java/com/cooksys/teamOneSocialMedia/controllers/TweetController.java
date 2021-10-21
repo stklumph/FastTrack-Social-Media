@@ -104,6 +104,11 @@ public class TweetController {
 	public void postLike(@PathVariable Integer id, @RequestBody CredentialsDto credentialsDto) {
 		tweetService.postLike(id, credentialsDto);
 	}
+	
+	@PostMapping("/{id}/repost")
+	public TweetResponseDto repostTweet(@PathVariable Integer id, @RequestBody CredentialsDto credentialsDto) {
+		return tweetService.repostTweet(id, credentialsDto);
+	}
 }
 
 

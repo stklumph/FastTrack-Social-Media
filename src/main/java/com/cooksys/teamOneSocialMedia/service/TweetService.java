@@ -35,4 +35,6 @@ public interface TweetService {
 
 	void postLike(Integer id, CredentialsDto credentialsDto);
 
+	TweetResponseDto repostTweet(Integer id, CredentialsDto credentialsDto);
+
 }
