@@ -112,13 +112,12 @@ public class Seeder implements CommandLineRunner {
 		c3.setUsername("username3");
 		c3.setPassword("password3");
 		u3.setCredentials(c3);
-		
+
 		List<User> follows = new ArrayList<>();
 		follows.add(u1);
 		follows.add(u2);
 		u3.setFollowing(follows);
-		
-		
+
 		Profile p3 = new Profile();
 		p3.setEmail("email3@email.com");
 		p3.setFirstName("You");
@@ -134,10 +133,10 @@ public class Seeder implements CommandLineRunner {
 		likes.add(u1);
 		likes.add(u2);
 		t3.setLikes(likes);
-		List<User> mentions = new ArrayList<>();
-		mentions.addAll(likes);
-		mentions.add(u3);
-		t3.setUsersMentioned(mentions);
+		// List<User> mentions = new ArrayList<>();
+		// mentions.addAll(likes);
+		// mentions.add(u3);
+		// t3.setUsersMentioned(mentions);
 		// List<Tweet> replies = new ArrayList<>();
 		// replies.add(t1);
 		// replies.add(t2);
@@ -159,7 +158,6 @@ public class Seeder implements CommandLineRunner {
 		h6.setFirstUsed(Timestamp.valueOf(LocalDateTime.now()));
 		h6.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
 
-		
 		hashtagRepository.saveAndFlush(h5);
 		hashtagRepository.saveAndFlush(h6);
 		userRepository.saveAndFlush(u3);
