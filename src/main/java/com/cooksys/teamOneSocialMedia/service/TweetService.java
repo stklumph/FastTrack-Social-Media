@@ -31,9 +31,6 @@ public interface TweetService {
 
 	TweetResponseDto deleteTweetById(Integer id, CredentialsDto credentialsDto);
 
-	List<TweetResponseDto> getAllTweetsByUser(String username);
-
-
 	List<TweetResponseDto> getUserFeed(String username);
 
 	void postLike(Integer id, CredentialsDto credentialsDto);

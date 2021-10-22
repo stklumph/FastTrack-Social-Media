@@ -153,4 +153,13 @@ public class UserServiceImpl implements UserService {
 		mentions.sort(tcr);
 		return tweetMapper.entitiesToDtos(filterDeleted(mentions));
 	}
+
+	@Override
+	public List<TweetResponseDto> getAllTweetsByUser(String username) {
+		List<Tweet> tweets = getUserByUsername(username).getTweets();
+		TweetCompareReverse tcr = new TweetCompareReverse();
+		tweets.sort(tcr);
+		return tweetMapper.entitiesToDtos(filterDeleted(tweets));
+	}
+
 }

@@ -93,7 +93,7 @@ public class UserController {
 	// username exists (deleted or never created), an error should be sent in lieu
 	// of a response.
 	public List<TweetResponseDto> getUserTweets(@PathVariable String username) {
-		return tweetService.getAllTweetsByUser(username);
+		return userService.getAllTweetsByUser(username);
 	}
 
 	// Retrieves all (non-deleted) tweets authored by the user with the given
