@@ -155,6 +155,7 @@ public class TweetServiceImpl implements TweetService {
 			if (group.length() > 0) {
 				mentions.add(group.substring(1));
 			}
+			System.out.println("found: " + group);
 		}
 
 		return mentions;
@@ -185,8 +186,8 @@ public class TweetServiceImpl implements TweetService {
 		userService.validateUserCredentials(user, credentials);
 		newTweet.setAuthor(user);
 		String content = tweetRequestDto.getContent();
-		final String ampersandRegEx = "@\\w*";
-		final String tagRegEx = "#\\w*";
+		final String ampersandRegEx = "@\\S*";
+		final String tagRegEx = "#\\S*";
 		newTweet.setUsersMentioned(
 				userRepository.findByDeletedFalseAndCredentialsUsernameIn(parse(content, ampersandRegEx)));
 		newTweet.setHashtags(getTags(parse(content, tagRegEx)));
