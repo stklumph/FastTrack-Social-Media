@@ -11,6 +11,8 @@ import com.cooksys.teamOneSocialMedia.dtos.TweetResponseDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserRequestDto;
 import com.cooksys.teamOneSocialMedia.dtos.UserResponseDto;
 import com.cooksys.teamOneSocialMedia.entities.Deleted;
+import com.cooksys.teamOneSocialMedia.entities.Tweet;
+import com.cooksys.teamOneSocialMedia.entities.TweetCompareReverse;
 import com.cooksys.teamOneSocialMedia.entities.User;
 import com.cooksys.teamOneSocialMedia.entities.embeddables.Credentials;
 import com.cooksys.teamOneSocialMedia.exceptions.BadRequestException;
@@ -146,6 +148,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<TweetResponseDto> getMentions(String username) {
-		return tweetMapper.entitiesToDtos(filterDeleted(getUserByUsername(username).getMentions()));
+		TweetCompareReverse tcr = new TweetCompareReverse();
+		List<Tweet> mentions = getUserByUsername(username).getMentions();
+		mentions.sort(tcr);
+		return tweetMapper.entitiesToDtos(filterDeleted(mentions));
 	}
 }
