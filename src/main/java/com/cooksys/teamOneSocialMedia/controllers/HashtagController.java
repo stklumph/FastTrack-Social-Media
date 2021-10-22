@@ -27,8 +27,8 @@ public class HashtagController {
 
 	// Retrieves all (non-deleted) tweets tagged with the given hashtag label
 	@GetMapping("{label}")
-	public List<TweetResponseDto> getAllHashtagsWithLabel(@PathVariable String label) {
-		return hashtagService.getAllHashtagsWithLabel(label);
+	public List<TweetResponseDto> getAllTweetsWithHashtag(@PathVariable String label) {
+		return hashtagService.getAllTweetsWithHashtag(label);
 	}
 
 }

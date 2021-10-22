@@ -45,7 +45,7 @@ public class Seeder implements CommandLineRunner {
 
 		Tweet t1 = new Tweet();
 		t1.setAuthor(u1);
-		t1.setContent("Entry 1");
+		t1.setContent("Entry 1 #start-up, #introduction");
 
 		Hashtag h1 = new Hashtag();
 		h1.setLabel("start-up");
@@ -84,7 +84,7 @@ public class Seeder implements CommandLineRunner {
 
 		Tweet t2 = new Tweet();
 		t2.setAuthor(u2);
-		t2.setContent("Entry 2");
+		t2.setContent("Entry 2 #introduction2, #new, #start-up");
 
 		Hashtag h3 = new Hashtag();
 		h3.setLabel("introduction2");
@@ -94,6 +94,7 @@ public class Seeder implements CommandLineRunner {
 		List<Hashtag> hashtagList2 = new ArrayList<>();
 		hashtagList2.add(h3);
 		hashtagList2.add(h4);
+		hashtagList2.add(h1);
 		t2.setHashtags(hashtagList2);
 		t2.setPosted(Timestamp.valueOf(LocalDateTime.now()));
 		h3.setFirstUsed(Timestamp.valueOf(LocalDateTime.now()));
@@ -128,7 +129,7 @@ public class Seeder implements CommandLineRunner {
 
 		Tweet t3 = new Tweet();
 		t3.setAuthor(u3);
-		t3.setContent("Entry 3");
+		t3.setContent("Entry 3 #triple, #3");
 		List<User> likes = new ArrayList<>();
 		likes.add(u1);
 		likes.add(u2);
