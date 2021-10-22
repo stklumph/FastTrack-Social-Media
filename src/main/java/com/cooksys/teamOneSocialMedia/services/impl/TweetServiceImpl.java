@@ -152,10 +152,9 @@ public class TweetServiceImpl implements TweetService {
 		while (matcher.find()) {
 			// this adds the parsed string, without the "@" or the "#"
 			String group = matcher.group();
-			if (group.length() > 0) {
+			if (group.length() > 1) {
 				mentions.add(group.substring(1));
 			}
-			System.out.println("found: " + group);
 		}
 
 		return mentions;
